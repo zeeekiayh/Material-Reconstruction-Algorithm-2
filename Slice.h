@@ -1,13 +1,11 @@
-
-//  ============================
 #include <iostream>
 #include "Pixel.h"
 #include <vector>
-//  ======================
 
 #ifndef SLICE_H
 #define SLICE_H
-//  =============
+
+
 class Slice {
 
 	public:
@@ -52,9 +50,6 @@ class Slice {
 		//Vector that holds the pixels
 		std::vector<Pixel> pixels;
 
-      
-        
-
-};//end Slice()
+}; // end Slice()
 
 #endif

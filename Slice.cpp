@@ -1,20 +1,18 @@
-//  ==================
 #include "Slice.h"
 #include "perlinnoise.h"
 #include <cmath>
-//  ==================
 
-//  ================
-Slice::Slice(): sz(10) {
+
+Slice::Slice(): sz(10)
+{
 	std::cout << "initializing Slice" << std::endl;
 	seed = round((rand() % 1000));
-	} // Constructor
-//  ================
+} // Constructor
+    
 
-//  ===============================
+
 void Slice::Initialize_Rand() 
 {
-		
 	std::cout << "randomizing Slice" << std::endl;
 
 	float temp;
@@ -28,14 +26,13 @@ void Slice::Initialize_Rand()
 	}
 
 };//end Slice::Initialize_Rand()
-//  ================================
 
-//  ================================
+
+
 void Slice::Initialize_Noise() 
 {
 	PerlinNoise pn(seed);
 		
-
 	std::cout << "noisifying Slice" << std::endl;
 	for (int i = 0; i < (sz * sz); i++)
 	{
@@ -44,13 +41,12 @@ void Slice::Initialize_Noise()
 		tempPixel.SetType(n);
 		pixels.push_back(tempPixel);
 	}
-		
-		
+	
 };//end Slice::Initialize_Noise()
-//  =================================
 
 
-//  ======================================
+
+
 int Slice::GetTypeAtIndex(int row, int col) const //starting at (0,0)
 {
 	if ((row > 0 && row < sz) && (col > 0 && col < sz))
@@ -58,73 +54,73 @@ int Slice::GetTypeAtIndex(int row, int col) const //starting at (0,0)
 	else
 		return -1;
 };//end Slice::GetTypeAtIndex()
-//  ===============================
-	
-//  =========================================================
-	int Slice::NumberSimilarPixels(int row, int col, int newRow, int newCol, const Slice & sample) const 
-	{
-		//This function finds the number of similar pixels
-		//within the neighborhood size.
-		//This is a full check for each pixel. This has a high proformance cost.
-		
-		int number_similar=0;
-		int rowPoint, colPoint, newRowPoint, newColPoint;
 
-		//This the loop to check every point.
-		for (int i = 0; i < 25; i++)
-		{
-			//sets the points to the right spot with respect to i.
-			rowPoint = ((row - 2) + (i / 5));
-			colPoint = ((col - 2) + (i % 5));
-			newRowPoint = ((newRow - 2) + (i / 5));
-			newColPoint = ((newCol - 2) + (i % 5));
 
-			//This checks if the two spots are the same.
-			if ((rowPoint > 0 && rowPoint < sz) && (colPoint > 0 && colPoint < sz) && (newRowPoint > 0 && newRowPoint < sz) && (newColPoint > 0 && newColPoint < sz))
-			{
-				if (GetTypeAtIndex(rowPoint, colPoint) == sample.GetTypeAtIndex(newRowPoint, newColPoint))
-					number_similar++;
-			}
-		}
-		return number_similar;
-		
-	};//end Slice::NumberSimilarPixels()
-//  ====================================
 
-	//  ======================================
-	int Slice::approximateNumberSimilarPixels(int row, int col, int newRow, int newCol, const Slice& sample) const
-	{
-		//This is only going to do a cross check
-		//this will decrease the number of checks from 25 to 9
-		int number_similar = 0;
-		int rowPoint, colPoint, newRowPoint, newColPoint;
+int Slice::NumberSimilarPixels(int row, int col, int newRow, int newCol, const Slice & sample) const 
+{
+    //This function finds the number of similar pixels
+    //within the neighborhood size.
+    //This is a full check for each pixel. This has a high proformance cost.
+    
+    int number_similar=0;
+    int rowPoint, colPoint, newRowPoint, newColPoint;
 
-		//This checks the corss at the same time but makes sure not to count the middle twice.
-		for (int i = 0; i < 5; i++)
-		{
-			//This where we change the col and row points in respect to i.
-			rowPoint = ((row - 2) + i);
-			newRowPoint = ((newRow - 2) + i);
-			colPoint = ((col - 2) + i);
-			newColPoint = ((newCol - 2) + i);
+    //This the loop to check every point.
+    for (int i = 0; i < 25; i++)
+    {
+        //sets the points to the right spot with respect to i.
+        rowPoint = ((row - 2) + (i / 5));
+        colPoint = ((col - 2) + (i % 5));
+        newRowPoint = ((newRow - 2) + (i / 5));
+        newColPoint = ((newCol - 2) + (i % 5));
 
-			//This keeps the col the same but changes the row
-			if ((rowPoint > 0 && rowPoint < sz) && (newRowPoint > 0 && newRowPoint < sz))
-			{
-				if (GetTypeAtIndex(rowPoint, col) == sample.GetTypeAtIndex(newRowPoint, newCol))
-					number_similar++;
-			}
+        //This checks if the two spots are the same.
+        if ((rowPoint > 0 && rowPoint < sz) && (colPoint > 0 && colPoint < sz) && (newRowPoint > 0 && newRowPoint < sz) && (newColPoint > 0 && newColPoint < sz))
+        {
+            if (GetTypeAtIndex(rowPoint, colPoint) == sample.GetTypeAtIndex(newRowPoint, newColPoint))
+                number_similar++;
+        }
+    }
+    return number_similar;
+    
+};//end Slice::NumberSimilarPixels()
 
-			//This keeps the row the same but changes the col unless it is in the middle.
-			if ((colPoint > 0 && colPoint < sz) && (newColPoint > 0 && newColPoint < sz) && (i != 3))
-			{
-				if (GetTypeAtIndex(row, colPoint) == sample.GetTypeAtIndex(newRow, newColPoint))
-					number_similar++;
-			}
-		}
-		return number_similar;
-	};//end Slice::approximateNumberSimilarPixels()
-	//  ===============================
+
+
+int Slice::approximateNumberSimilarPixels(int row, int col, int newRow, int newCol, const Slice& sample) const
+{
+    //This is only going to do a cross check
+    //this will decrease the number of checks from 25 to 9
+    int number_similar = 0;
+    int rowPoint, colPoint, newRowPoint, newColPoint;
+
+    //This checks the corss at the same time but makes sure not to count the middle twice.
+    for (int i = 0; i < 5; i++)
+    {
+        //This where we change the col and row points in respect to i.
+        rowPoint = ((row - 2) + i);
+        newRowPoint = ((newRow - 2) + i);
+        colPoint = ((col - 2) + i);
+        newColPoint = ((newCol - 2) + i);
+
+        //This keeps the col the same but changes the row
+        if ((rowPoint > 0 && rowPoint < sz) && (newRowPoint > 0 && newRowPoint < sz))
+        {
+            if (GetTypeAtIndex(rowPoint, col) == sample.GetTypeAtIndex(newRowPoint, newCol))
+                number_similar++;
+        }
+
+        //This keeps the row the same but changes the col unless it is in the middle.
+        if ((colPoint > 0 && colPoint < sz) && (newColPoint > 0 && newColPoint < sz) && (i != 3))
+        {
+            if (GetTypeAtIndex(row, colPoint) == sample.GetTypeAtIndex(newRow, newColPoint))
+                number_similar++;
+        }
+    }
+    return number_similar;
+
+};//end Slice::approximateNumberSimilarPixels()
 
 
 	
@@ -175,34 +171,32 @@ int Slice::GetTypeAtIndex(int row, int col) const //starting at (0,0)
 	};//end Slice::FindClosestNeighborhood()
 //  ========================================
 
-	/*
+/*
 //not done
-//  ==================================
-	void Slice::VoteCloseNeighbors() {
+void Slice::VoteCloseNeighbors() {
 
-		//We may just need to vote on any pixels in
-		//  the neighboorhoods as we go through.
+    //We may just need to vote on any pixels in
+    //  the neighboorhoods as we go through.
 
-	};//end Slice::VoteCloseNeighbors()
-//  ===================================
+};//end Slice::VoteCloseNeighbors()
+
 
 //not done
-//  ===========================================
-	float Slice::CalculateError(Pixel sample) {
+float Slice::CalculateError(Pixel sample) {
 
-		//The error is basically the total
-		//  number of different pixels in
-		//  every best matching neighborhood
-		
-		//Go through all the pixels in 'random'
-		//  and find the closest neighborhood.
-		//Then, difference between the number of
-		//  similar pixels and the total possible
-		//  number of similar pixels; add it to 
-		//  the total differences.
+    //The error is basically the total
+    //  number of different pixels in
+    //  every best matching neighborhood
+    
+    //Go through all the pixels in 'random'
+    //  and find the closest neighborhood.
+    //Then, difference between the number of
+    //  similar pixels and the total possible
+    //  number of similar pixels; add it to 
+    //  the total differences.
 
-		return 0.00;
-		
-	};//end Slice::CalculateError()
-//  ===============================
+    return 0.00;
+    
+};//end Slice::CalculateError()
+
 */

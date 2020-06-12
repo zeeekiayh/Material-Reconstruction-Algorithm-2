@@ -4,7 +4,6 @@
 #define PIXEL_H
 
 
-//=============
 class Pixel 
 {
 
@@ -41,7 +40,7 @@ class Pixel
 
 	private:
 			
-           //this describes the 'color' of the pixel
+        //this describes the 'color' of the pixel
 		int typ;
 		
 		//this points to the Pixel who's neighborhood
