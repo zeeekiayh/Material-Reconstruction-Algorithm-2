@@ -164,7 +164,7 @@ int Slice::approximateNumberSimilarPixels(int row, int col, int newRow, int newC
 				
 		};};//end for()'s in sample
 		
-		//return the index of the best macth
+		//return the index of the best match
 		//  and store it in the pixel's variable
 		//return idx_best_match;
 		
@@ -177,6 +177,15 @@ void Slice::VoteCloseNeighbors() {
 
     //We may just need to vote on any pixels in
     //  the neighboorhoods as we go through.
+    
+    //Loop through the list or best matches,
+    //  looking through each of their neighborhoods
+    //  to find dissimilar pixels. When found, vote
+    //  +1 to change it (if different than the
+    //  corresponding pixel in the sample), or -1 to
+    //  keep it the same. Once this is done, we will
+    //  loop through the entire slice to change the
+    //  pixels that have > +1 votes.
 
 };//end Slice::VoteCloseNeighbors()
 
