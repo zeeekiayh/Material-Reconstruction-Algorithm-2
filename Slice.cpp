@@ -174,9 +174,6 @@ int Slice::approximateNumberSimilarPixels(int row, int col, int newRow, int newC
 /*
 //not done
 void Slice::VoteCloseNeighbors() {
-
-    //We may just need to vote on any pixels in
-    //  the neighboorhoods as we go through.
     
     //Loop through the list or best matches,
     //  looking through each of their neighborhoods
@@ -186,6 +183,28 @@ void Slice::VoteCloseNeighbors() {
     //  keep it the same. Once this is done, we will
     //  loop through the entire slice to change the
     //  pixels that have > +1 votes.
+    
+    //Pseudocode:
+    FOR r in Slice_reconstruc_rows:
+        FOR c in Slice_reconstruc_cols:
+	    
+	    slice_rows = r - neighborhood_size/2
+	    slice_cols = c - neighborhood_size/2
+		    
+	    nnr = Slice[r][c].nearest_neighbor_row_index
+	    nnc = Slice[r][c].nearest_neighbor_col_index
+	    
+	    FOR sample_rows in Rows_of_nearest_neighborhood_of[r][c]:     // of the sample
+	        FOR sample_cols in Cols_of_nearest_neighborhood_of[r][c]: // of the sample
+		    
+		    // if a pixel in [r][c]'s neighborhood is different than the correspoding
+		    //    pixel in the best_match's neighborhood in the sample, vote +1 to change it
+	            IF ( Slice[r + slice_rows][c + slice_cols].type != Sample[nnr + sample_rows][nnc + sample_cols].type ):
+		        Slice[r + slice_rows][c + slice_cols].add_vote( 1 )
+		    
+	            ELSE:
+		        // vote to keep it the same
+		        Slice[r + slice_rows][c + slice_cols].add_vote( -1 )
 
 };//end Slice::VoteCloseNeighbors()
 
